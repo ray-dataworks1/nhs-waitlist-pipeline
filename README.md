@@ -2,7 +2,9 @@
 
 ## Project Summary
 This project is a simulated internal MVP for Kubrick, designed to demonstrate stakeholder-driven analytics engineering for NHS healthcare clients. It surfaces overdue elective cases, risk-stratified backlogs, and capacity mismatches to support Trusts and ICSs in operational decision-making.  
-**All data is synthetic and no real patient data is used.**
+
+### Data Source:
+This project uses the Synthea synthetic health dataset. All tables are generated using Synthea and contain no real patient information. This ensures GDPR/HIPAA compliance and allows safe, large-scale analytics engineering.
 
 ## Strategic Objectives
 - Identify and reduce overdue elective cases.

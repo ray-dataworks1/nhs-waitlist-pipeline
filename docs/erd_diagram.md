@@ -1,99 +1,83 @@
-Table patients {
-  id varchar [primary key]
-  birthdate datetime
-  deathdate datetime
-  ssn text
-  drivers text
-  passport text
-  prefix text
-  first text
-  last text
-  suffix text
-  maiden text
-  marital text
-  race text
-  ethnicity text
-  gender text
-  birthplace text
-  address text
-  city text
-  state text
-  county text
-  zip text
-  lat decimal
-  long decimal
-  healthcare_expenses decimal
-  healthcare_coverage decimal
+# NHS Waitlist ERD
+
+
+```plantuml
+
+@startuml 
+entity "patients" as patients {
+  *patient_id : int <<PK>>
+  nHS_number : string
+  first_name : string
+  last_name : string
+  dob : date
+  gender : string
+  postcode : string
+  ethnicity : string
+  risk_level : string
 }
 
-Table encounters {
-  id varchar [primary key]
-  start datetime
-  stop datetime
-  patient text
-  organisation text
-  provider text
-  payer text
-  encounterclass text
-  code text
-  description text
-  base_encounter_cost decimal
-  total_claim_cost decimal
-  payer_coverage decimal
-  reasoncode text
-  reasondescription text
+entity "gp" as gp {
+  *gp_id : int <<PK>>
+  gp_name : string
+  practice_name : string
+  practice_postcode : string
 }
 
-Table conditions {
-  start datetime
-  stop datetime
-  patient text
-  encounter text
-  code text
-  description text
+entity "trusts" as trusts {
+  *trust_id : int <<PK>>
+  trust_name : string
+  region : string
 }
 
-
-Table careplans {
-  id varchar [primary key]
-  start datetime
-  stop datetime
-  patient text
-  encounter text
-  code text
-  description text
-  reasoncode text
-  reasondescription text
+entity "referrals" as referrals {
+  *referral_id : int <<PK>>
+  patient_id : int <<FK>>
+  gp_id : int <<FK>>
+  referral_date : date
+  specialty : string
+  reason : string
+  referral_status : string
+  trust_id : int <<FK>>
+  notes : string
 }
 
-
-
-Table procedures {
-  start datetime
-  stop datetime
-  patient text
-  encounter text
-  code text
-  description text
-  base_cost decimal
-  reasoncode text
-  reasondescription text
+entity "appointments" as appointments {
+  *appointment_id : int <<PK>>
+  patient_id : int <<FK>>
+  trust_id : int <<FK>>
+  specialty : string
+  appt_date : date
+  appt_status : string
+  referral_date : date
+  wait_weeks : int
 }
 
+entity "procedures" as procedures {
+  *procedure_id : int <<PK>>
+  patient_id : int <<FK>>
+  procedure_name : string
+  planned_date : date
+  actual_date : date
+  status : string
+}
 
-Ref encounters: encounters.patient > patients.id // many-to-one
+entity "conditions" as conditions {
+  *condition_id : int <<PK>>
+  patient_id : int <<FK>>
+  condition_name : string
+  severity : string
+  active : string
+}
 
-Ref conditions: conditions.patient > patients.id // many-to-one
+patients ||--o{ referrals : "has"
+gp ||--o{ referrals : "makes"
+trusts ||--o{ referrals : "receives"
 
-Ref careplans: careplans.patient > patients.id // many-to-one
+patients ||--o{ appointments : "books"
+trusts ||--o{ appointments : "provides"
 
-Ref procedures: procedures.patient > patients.id
-
-Ref conditions: conditions.encounter > encounters.id
-
-Ref careplans: careplans.encounter > encounters.id
-
-Ref procedures: procedures.encounter > encounters.id
+patients ||--o{ procedures : "undergoes"
+patients ||--o{ conditions : "has"
 
 
-![alt text](image.png)
+@enduml

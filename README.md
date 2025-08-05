@@ -4,7 +4,8 @@
 This project is a simulated internal MVP for Kubrick, designed to demonstrate stakeholder-driven analytics engineering for NHS healthcare clients. It surfaces overdue elective cases, risk-stratified backlogs, and capacity mismatches to support Trusts and ICSs in operational decision-making.  
 
 ### Data Source:
-This project uses the Synthea synthetic health dataset. All tables are generated using Synthea and contain no real patient information. This ensures GDPR/HIPAA compliance and allows safe, large-scale analytics engineering.
+This project uses the Synthea synthetic health dataset. All tables are generated using Synthea and contain no real patient information, the stack will reflect legacy tooling used within the NHS and reflect on pain points and areas for improvement. This ensures GDPR/HIPAA compliance and allows safe, large-scale analytics engineering with a realistic yet innovative edge.
+
 
 ## Strategic Objectives
 - Identify and reduce overdue elective cases.
@@ -88,13 +89,21 @@ A:
 
 ## Tools Used
 
-- [dbt Core](https://docs.getdbt.com/)
-- BigQuery (Warehouse)
+- Microsoft SQL Server
+- Power BI
 - Git / GitHub
 - Markdown (docs)
 
+
+## Pain Points
+Notice: all relationships are handled by raw IDs: no modularity, hard to trace lineage, difficult to extend.
+
+All transformations must be hand-coded in stored procs/views, making them very hard to audit and less friendly for ramping up junior data and analytics engineers in any team production environment.
+
+Power BI dashboards are disconnected from source versioning, and therefore functions as a disparate source of truth, less visible, iteratable and automatable in team environments.
+
 ## Implementation Notes
-- Built in dbt with modular SQL models.
+- Built in SQL Server with modular handcoded models.
 - Designed for handover and extension by NHS data teams.
 - All logic and requirements documented for transparency.
 - 

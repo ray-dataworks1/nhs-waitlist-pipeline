@@ -1,0 +1,39 @@
+# dbt_project.yml
+
+name: 'nhs_waitlist_pipeline'
+version: '1.0.0'
+config-version: 2
+
+profile: 'nhs_waitlist_pipeline'
+
+# Where dbt should look for models
+model-paths: ["models"]
+
+# Where dbt should store compiled SQL and target output
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_modules"
+
+models:
+  nhs_waitlist_pipeline:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: table
+    marts:
+      +materialized: table
+
+# Define seeds, snapshots, tests directories if you use them
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+
+# Require dbt >= 1.0.0
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+
+# Turn on colors/logging
+quoting:
+  database: false
+  schema: false
+  identifier: false

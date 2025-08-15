@@ -1,4 +1,4 @@
-ID,patient_id,gp_id,referral_date,specialty,reason,referral_status,trust_id,notes
+referral_id,patient_id,gp_id,referral_date,specialty,reason,referral_status,trust_id,notes
 1,1,10,11/12/2024,Cardiology,Uncontrolled blood pressure,Open,4,Quas molestiae nostrum eveniet occaecati facere.
 2,2,1,30/04/2024,Urology,Abnormal ECG,Pending,4,Commodi deleniti minima rem autem non iure quisquam nemo.
 3,3,9,25/02/2025,Neurology,Unexplained weight loss,Pending,4,Voluptas laborum ut eum nostrum dolores cupiditate dolore ratione.

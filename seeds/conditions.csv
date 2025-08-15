@@ -1,4 +1,4 @@
-ID,patient_id,condition_name,severity,active
+condition_id,patient_id,condition_name,severity,active
 1,1,COPD,Severe,Yes
 2,1,Depression,Mild,No
 3,2,Type 2 Diabetes,Severe,Yes

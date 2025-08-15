@@ -1,0 +1,207 @@
+version: 2
+
+seeds:
+  - name: patients
+    description: "Synthetic NHS patient master."
+    columns:
+      - name: patient_id
+        tests: [not_null, unique]
+      - name: nhs_number
+        description: "10-digit NHS number; may contain spaces in raw."
+        tests:
+          - not_null
+      - name: first_name
+        tests: [not_null]
+      - name: last_name
+        tests: [not_null]
+      - name: dob
+        description: "Date of birth (YYYY-MM-DD)."
+        tests: [not_null]
+      - name: gender
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Male', 'Female', 'Other']
+      - name: postcode
+        tests: [not_null]
+      - name: ethnicity
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                [
+                  'White British',
+                  'Black African',
+                  'Black Caribbean',
+                  'South Asian',
+                  'East Asian',
+                  'Mixed',
+                  'Other'
+                ]
+      - name: risk_level
+        tests:
+          - accepted_values:
+              values: ['Low', 'Medium', 'High']
+
+  - name: gp
+    columns:
+      - name: gp_id
+        tests: [not_null, unique]
+      - name: gp_name
+        tests: [not_null]
+      - name: practice_name
+        tests: [not_null]
+      - name: practice_postcode
+        tests: [not_null]
+
+  - name: trusts
+    columns:
+      - name: trust_id
+        tests: [not_null, unique]
+      - name: trust_name
+        tests: [not_null]
+      - name: region
+        tests: [not_null]
+
+  - name: referrals
+    columns:
+      - name: referral_id
+        tests: [not_null, unique]
+      - name: patient_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('patients')
+              field: patient_id
+      - name: gp_id
+        tests:
+          - relationships:
+              to: ref('gp')
+              field: gp_id
+      - name: referral_date
+        tests: [not_null]
+      - name: specialty
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                [
+                  'Cardiology',
+                  'General Surgery',
+                  'Endocrinology',
+                  'Dermatology',
+                  'Gastroenterology',
+                  'Neurology',
+                  'Oncology',
+                  'Orthopaedics',
+                  'Paediatrics',
+                  'Psychiatry',
+                  'Urology',
+                  'Rheumatology',
+                  'Respiratory Medicine'
+                ]
+      - name: reason
+        tests: [not_null]
+      - name: referral_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Pending', 'Accepted', 'Rejected', 'Completed', 'Open', 'Closed']
+      - name: trust_id
+        tests:
+          - relationships:
+              to: ref('trusts')
+              field: trust_id
+      - name: notes
+
+  - name: appointments
+    columns:
+      - name: appointment_id
+        tests: [not_null, unique]
+      - name: patient_id
+        tests:
+          - relationships:
+              to: ref('patients')
+              field: patient_id
+      - name: trust_id
+        tests:
+          - relationships:
+              to: ref('trusts')
+              field: trust_id
+      - name: specialty
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                [
+                  'Cardiology',
+                  'General Surgery',
+                  'Endocrinology',
+                  'Dermatology',
+                  'Gastroenterology',
+                  'Neurology',
+                  'Oncology',
+                  'Orthopaedics',
+                  'Paediatrics',
+                  'Psychiatry',
+                  'Urology',
+                  'Rheumatology',
+                  'Respiratory Medicine'
+                ]
+      - name: appt_date
+        tests: [not_null]
+      - name: appt_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Scheduled', 'Completed', 'Cancelled', 'No Show', 'Rescheduled']
+      - name: referral_date
+        tests: [not_null]
+      - name: wait_weeks
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+
+  - name: conditions
+    columns:
+      - name: condition_id
+        tests: [not_null, unique]
+      - name: patient_id
+        tests:
+          - relationships:
+              to: ref('patients')
+              field: patient_id
+      - name: condition_name
+        tests: [not_null]
+      - name: severity
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Mild', 'Moderate', 'Severe', 'Critical']
+      - name: active
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Yes', 'No']
+
+  - name: procedures
+    columns:
+      - name: procedure_id
+        tests: [not_null, unique]
+      - name: patient_id
+        tests:
+          - relationships:
+              to: ref('patients')
+              field: patient_id
+      - name: procedure_name
+        tests: [not_null]
+      - name: planned_date
+        tests: [not_null]
+      - name: actual_date
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Scheduled', 'Completed', 'Cancelled', 'Postponed', 'Planned', 'Delayed']

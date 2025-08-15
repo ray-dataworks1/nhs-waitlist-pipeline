@@ -1,4 +1,4 @@
-ID,nhs_number,first_name,last_name,DOB,gender,postcode,ethnicity,risk_level
+patient_id,nhs_number,first_name,last_name,DOB,gender,postcode,ethnicity,risk_level
 1,8354759486,Pauline,Clayton,20/12/1966,Female,E17 7JN,White British,Medium
 2,9459692483,Rosemary,Rogers,21/09/1943,Male,CB2 0QQ,Black Caribbean,High
 3,4716782367,Michelle,Peacock,13/10/1970,Male,CB4 2NF,White British,Medium

@@ -1,4 +1,4 @@
-ID,patient_id,procedure_name,planned_date,actual_date,status
+procedure_id,patient_id,procedure_name,planned_date,actual_date,status
 1,1,Hip Replacement,09/07/2025,,Planned
 2,7,Pacemaker Insertion,21/10/2024,11/11/2024,Completed
 3,9,Colonoscopy,07/01/2024,18/02/2024,Completed

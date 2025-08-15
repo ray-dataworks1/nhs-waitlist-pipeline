@@ -1,4 +1,4 @@
-ID,patient_id,trust_id,specialty,appt_date,appt_status,referral_date,wait_weeks
+appointment_id,patient_id,trust_id,specialty,appt_date,appt_status,referral_date,wait_weeks
 1,1,4,Cardiology,29/10/2025,Completed,11/12/2024,46
 2,1,4,Cardiology,15/10/2025,Scheduled,11/12/2024,44
 3,2,4,Urology,14/05/2024,Scheduled,30/04/2024,2

@@ -154,7 +154,7 @@ seeds:
         tests:
           - not_null
           - accepted_values:
-              values: ['Scheduled', 'Completed', 'Cancelled', 'No Show', 'Rescheduled']
+              values: ['Scheduled', 'Completed', 'Cancelled', 'No-show', 'Rescheduled']
       - name: referral_date
         tests: [not_null]
       - name: wait_weeks
@@ -205,3 +205,128 @@ seeds:
           - not_null
           - accepted_values:
               values: ['Scheduled', 'Completed', 'Cancelled', 'Postponed', 'Planned', 'Delayed']
+
+  - name: sla_by_specialty
+    columns:
+      - name: specialty
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: [Cardiology, Urology, Neurology, General Surgery, Dermatology, Endocrinology, Orthopaedics, Gastroenterology, Respiratory Medicine, Rheumatology]
+      - name: rtt_weeks_threshold
+        tests:
+          - not_null
+
+models:
+  - name: stg_patients
+    description: "Cleaned patient master data."
+    columns:
+      - name: patient_sk
+        tests: [not_null, unique]
+      - name: nhs_number
+        tests: [not_null, unique, nhs_number_valid]
+      - name: dob
+        tests: [not_null]
+      - name: gender
+        tests:
+          - accepted_values:
+              values: ['Male','Female','Other']
+      - name: postcode
+        tests: [not_null]
+      - name: ethnicity
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                [
+                  'White British',
+                  'Black African',
+                  'Black Caribbean',
+                  'South Asian',
+                  'East Asian',
+                  'Mixed',
+                  'Other'
+                ]
+      - name: risk_level
+        tests:
+          - accepted_values:
+              values: ['Low', 'Medium', 'High']
+
+  - name: stg_gp
+    description: "GP practice registry."
+    columns:
+      - name: gp_sk
+        tests: [not_null, unique]
+      - name: gp_name
+        tests: [not_null]
+      - name: practice
+        tests: [not_null, unique]
+      - name: postcode
+        tests: [not_null, unique]
+
+  - name: stg_referrals
+    description: "Referrals from GPs to Trusts."
+    columns:
+      - name: referral_sk
+        tests: [not_null, unique]
+      - name: patient_id
+        tests: [relationships: {to: ref('stg_patients'), field: patient_id}]
+      - name: gp_id
+        tests: [relationships: {to: ref('stg_gp'), field: gp_id}]
+      - name: referral_date
+        tests: [not_null]
+      - name: specialty
+        tests: [not_null]
+      - name: reason
+        tests: [not_null]
+      - name: referral_status
+      - name: trust_id
+        tests: [relationships: {to: ref('stg_gp'), field: gp_id}]
+      - name: notes
+        tests: [not_null]
+
+  - name: stg_appointments
+    description: "Elective care appointments."
+    columns:
+      - name: appointment_sk
+        tests: [not_null, unique]
+      - name: nhs_number
+        tests: [relationships: {to: ref('stg_patients'), field: nhs_number}]
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['BOOKED','ATTENDED','CANCELLED','DNA']
+
+  - name: stg_procedures
+    description: "Elective procedures."
+    columns:
+      - name: procedure_sk
+        tests: [not_null, unique]
+      - name: nhs_number
+        tests: [relationships: {to: ref('stg_patients'), field: nhs_number}]
+
+  - name: stg_trusts
+    description: "NHS Trust registry."
+    columns:
+      - name: trust_sk
+        tests: [not_null, unique]
+
+  - name: stg_conditions
+    description: "Patient conditions/comorbidities."
+    columns:
+      - name: condition_sk
+        tests: [not_null, unique]
+      - name: nhs_number
+        tests: [relationships: {to: ref('stg_patients'), field: nhs_number}]
+  - name: stg_sla_by_specialty
+    description: "sla by specialty"
+    columns: 
+      - name: sla_sk
+        tests: [not_null, unique]
+      - name: specialty
+        tests: [not_null, unique]
+      - name: rtt_weeks_threshold
+        tests: [not_null]
+      - name: audit_flag
+        tests: [not_null]

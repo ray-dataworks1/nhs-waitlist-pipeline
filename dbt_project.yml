@@ -14,15 +14,23 @@ target-path: "target"
 clean-targets:
   - "target"
   - "dbt_modules"
+  
+seeds:
+  nhs_waitlist_pipeline:
+  +schema: raw
 
 models:
   nhs_waitlist_pipeline:
     staging:
+      +schema: staging
       +materialized: view
     intermediate:
+      +schema: intermediate
       +materialized: table
     marts:
+      +schema: mart
       +materialized: table
+
 
 # Define seeds, snapshots, tests directories if you use them
 seed-paths: ["seeds"]

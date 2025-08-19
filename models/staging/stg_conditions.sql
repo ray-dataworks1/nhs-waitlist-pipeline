@@ -4,8 +4,8 @@ with raw as (
 clean as (
     select
         {{ dbt_utils.generate_surrogate_key(['condition_id', 'patient_id', 'active']) }} as condition_sk,
-        condition_id,
-        patient_id,
+        condition_id:: int as condition_id,
+        patient_id :: int as patient_id,
         initcap(trim(condition_name)) as condition_name,
         initcap(trim(severity)),
         initcap(trim(active))

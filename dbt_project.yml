@@ -17,18 +17,17 @@ clean-targets:
   
 seeds:
   nhs_waitlist_pipeline:
-  +schema: raw
+    +schema: "RAW"
+    +materialized: seed
 
 models:
   nhs_waitlist_pipeline:
     staging:
-      +schema: staging
+      +schema: "STAGING"
       +materialized: view
     intermediate:
-      +schema: intermediate
       +materialized: table
     marts:
-      +schema: mart
       +materialized: table
 
 

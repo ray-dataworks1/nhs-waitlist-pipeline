@@ -89,7 +89,7 @@ Data is designed for rapid analytics prototyping and dashboarding. See [`/data`]
 | `stg_appointments`     | Appointment/capacity event staging                             |
 | `stg_referrals`        | Normalised GP referral journey                                 |
 | `fct_waitlist`         | Unified waitlist fact table (core reporting layer)             |
-| `dim_risk_cohort`      | Patient risk tiers/cohorts for prioritisation                  |
+| `dim_specialty`        | Specialities, cleaned and deduped                              |
 | `fct_capacity_audit`   | Planned vs actual capacity audit for ops teams                 |
 
 ---

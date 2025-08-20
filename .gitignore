@@ -20,3 +20,7 @@ env/
 
 # VSCode project settings
 .vscode/
+
+# To-Do Folders: Aspirational models that go beyond the current scope
+# and are not yet implemented.
+to_do/

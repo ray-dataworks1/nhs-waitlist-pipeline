@@ -9,7 +9,7 @@ clean as (
         upper(trim(procedure_name)) as procedure_name,
         to_date(planned_date, 'DD/MM/YYYY') as planned_date,
         to_date(actual_date, 'DD/MM/YYYY') as actual_date,
-        initcap(trim(status))
+        initcap(trim(status)) as procedure_status
     from raw
 )
 select * from clean

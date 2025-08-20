@@ -1,23 +1,35 @@
 {{ config(materialized='view') }}
 
-with referrals as (
-  select referral_id, {{ strip_non_digits('nhs_number') }} as nhs_number,
-         referral_date, upper(trim(urgency)) as urgency,
-         upper(trim(specialty)) as specialty, trust_id, gp_id
+with r as (
+  select
+    referral_id,
+    patient_id,
+    gp_id,
+    trust_id,
+    specialty,       -- InitCap
+    referral_date,
+    referral_status,
+    reason,
+    notes
   from {{ ref('stg_referrals') }}
 ),
-appts as (
-  select nhs_number, upper(trim(specialty)) as specialty, trust_id,
-         min(appointment_date) as first_appointment_date
-  from {{ ref('stg_appointments') }}
-  group by 1,2,3
+first_appt as (
+  /* First appointment AFTER the referral for same patient/specialty/trust */
+  select
+    r.referral_id,
+    min(a.appointment_date) as first_appointment_date
+  from r
+  join {{ ref('stg_appointments') }} a
+    on a.patient_id = r.patient_id
+   and a.trust_id   = r.trust_id
+   and a.specialty  = r.specialty
+   and a.appointment_date >= r.referral_date
+  group by 1
 )
+
 select
-  referrals.*,
-  appts.first_appointment_date,
-  {{ weeks_between('referrals.referral_date', 'appts.first_appointment_date') }} as weeks_to_first_appointment
-from referrals
-left join appts
-  on appts.nhs_number = referrals.nhs_number
- and appts.specialty  = referrals.specialty
- and appts.trust_id   = referrals.trust_id;
+  r.*,
+  first_appt.first_appointment_date,
+  {{ weeks_between('r.referral_date','first_appt.first_appointment_date') }} as weeks_to_first_appointment
+from r
+left join first_appt using (referral_id)

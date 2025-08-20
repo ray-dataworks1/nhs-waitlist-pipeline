@@ -7,8 +7,8 @@ clean as (
         condition_id:: int as condition_id,
         patient_id :: int as patient_id,
         initcap(trim(condition_name)) as condition_name,
-        initcap(trim(severity)),
-        initcap(trim(active))
+        initcap(trim(severity)) as severity,
+        initcap(trim(active)) as active
     from raw
 )
 select * from clean

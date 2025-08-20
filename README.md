@@ -10,6 +10,41 @@
 - Rapid prototyping with UK NHS-inspired, fully synthetic data—optimized for analytics, not anonymisation.
 
 ---
+📌 Project at a Glance
+
+🚀 Tech Stack: dbt + Snowflake + PlantUML (docs)
+
+📊 Data Model: 8 staging, 6 intermediate, 3 marts, 4 seeds
+
+✅ Core Deliverables: fct_waitlist (unified waitlist fact), fct_capacity_audit (capacity vs. demand), specialty + patient dimensions
+
+🔎 Stakeholders: NHS Trust Clinical Leads, ICS Operations Managers
+
+🔬 Known Issues / Next Steps
+
+Nulls → specialty_sk contains nulls due to incomplete reference data; would resolve with enforced FK constraints + cleaning seed table.
+
+Row inflation → fct_capacity_audit row counts inflated due to non-unique join; next step is surrogate key + distincts in upstream CTE.
+
+Test coverage → Currently running not_null + unique; need to add relationships + accepted_values.
+
+Dashboard gap → Mart outputs not yet visualised in Metabase/Power BI; next step is producing breach rate + backlog dashboards.
+
+Future Enhancements
+
+Incremental waitlist model for real-time refreshes
+
+Social determinants + patient experience metrics
+
+Spatial analytics at ICS/Trust level
+
+📝 Lessons Learned
+
+Designed fact/dimension model around real NHS stakeholder questions (breaches, capacity, risk).
+
+Debugged null + runaway joins using row audits + surrogate keys.
+
+Learned to trade off between “perfect pipeline” vs. “document and ship.”
 
 ## Data Provenance & Project Design
 
@@ -145,6 +180,9 @@ A: All data is synthetic, hand-crafted for analytics prototyping with UK NHS str
 
 **Q: How would you scale for a real Trust?**  
 A: Modular data models can be adapted for any Trust; clinical validation and data pipeline automation are next steps.
+
+
+
 
 ---
 
